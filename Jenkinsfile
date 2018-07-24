@@ -1,5 +1,9 @@
 pipeline {
     agent any
+    tools {
+        maven 'Maven 3.3.9'
+        jdk 'jdk8'
+    }
     
     parameters { 
          string(name: 'tomcat_dev', defaultValue: '153.73.144.245:8080', description: 'Staging Server')
@@ -14,9 +18,8 @@ stages{
         stage('Build'){
  
             steps {
-                dir("project_templates/java_project_template"){
-                sh 'mvn clean verify'
-
+                ansiColor("xterm") {
+                    sh "mvn -B deploy"
                 }
             }
       }
