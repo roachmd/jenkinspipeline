@@ -16,19 +16,19 @@ pipeline {
                 }
             }
         }
-        stage ('Deploy to Staging'){
+        stage ('deploytostaging'){
             steps {
-                build job: 'Deploy-to-staging'
+                build job: 'deploytostaging'
             }
         }
 
-        stage ('Deploy to Production'){
+        stage ('deploytoproduction'){
             steps{
                 timeout(time:5, unit:'DAYS'){
                     input message:'Approve PRODUCTION Deployment?'
                 }
 
-                build job: 'Deploy-to-Prod'
+                build job: 'deploytoproduction'
             }
             post {
                 success {
