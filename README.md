@@ -1,4 +1,4 @@
-# maven-project
+# maven-project adding local maven
 Source code for James Lee's Jenkins course.
 
 Check out the full list of DevOps and Big Data courses that James and Tao teach.
