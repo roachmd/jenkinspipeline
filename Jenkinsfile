@@ -20,6 +20,7 @@ stages{
                 // Maven settings and global settings can also be defined in Jenkins Global Tools Configuration
                 mavenSettingsConfig: 'maven35',
                 mavenLocalRepo: '.repository')
+                
                 sh 'mvn clean package'
             }
             post {
