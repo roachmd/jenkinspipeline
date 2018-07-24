@@ -13,21 +13,11 @@ pipeline {
 stages{
         stage('Build'){
  
-            steps { 
-                git url: 'https://github.com/cyrille-leclerc/multi-module-maven-project'
+            steps {
+                dir("project_templates/java_project_template"){
+                sh 'mvn clean verify
 
-                withMaven(
-                    // Maven installation declared in the Jenkins "Global Tool Configuration"
-                    maven: 'maven35',
-                    // Maven settings.xml file defined with the Jenkins Config File Provider Plugin
-                    // Maven settings and global settings can also be defined in Jenkins Global Tools Configuration
-                    mavenSettingsConfig: 'maven35',
-                    mavenLocalRepo: '.repository') {
-
-                  // Run the maven build
-                  sh "clean package"
-
-                } // withMaven will discover the generated Maven artifacts, JUnit Surefire & FailSafe & FindBugs reports...
+                }
             }
       }
 
