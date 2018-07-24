@@ -25,14 +25,8 @@ stages{
 
                   // Run the maven build
                   sh "mvn clean install"
+               }
             }
-            post {
-                success {
-                    echo 'Now Archiving...'
-                    archiveArtifacts artifacts: '**/target/*.war'
-                }
-            }
-        }
 
         stage ('Deployments'){
             parallel{
