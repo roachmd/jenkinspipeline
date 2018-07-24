@@ -18,7 +18,7 @@ stages{
         stage('Build'){
  
             steps {
-                ansiColor("xterm") {
+                {
                     sh "mvn -B deploy"
                 }
             }
