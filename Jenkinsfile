@@ -4,38 +4,43 @@ pipeline {
         maven 'maven35'
         jdk 'java8'
     }
-    
-    parameters { 
-         string(name: 'tomcat_dev', defaultValue: '153.73.144.245:8080', description: 'Staging Server')
-         string(name: 'tomcat_prod', defaultValue: '153.73.144.245:9090', description: 'Production Server')
-    } 
-
-    triggers {
-         pollSCM('* * * * *') // Polling Source Control
-     }
-
-stages{
+    stages{
         stage('Build'){
- 
             steps {
-                 sh "mvn -B deploy"
+                sh 'mvn clean package'
             }
-      }
-
-        stage ('Deployments'){
-            parallel{
-                stage ('Deploy to Staging'){
-                    steps {
-                        sh "scp -i /home/jenkins/tomcat-demo.pem **/target/*.war tomcan@${params.tomcat_dev}:/var/lib/tomcat7/webapps"
-                    }
-                }
-
-                stage ("Deploy to Production"){
-                    steps {
-                        sh "scp -i /home/jenkins/tomcat-demo.pem **/target/*.war tomcat@${params.tomcat_prod}:/var/lib/tomcat7/webapps"
-                    }
+            post {
+                success {
+                    echo 'Now Archiving...'
+                    archiveArtifacts artifacts: '**/target/*.war'
                 }
             }
         }
+        stage ('Deploy to Staging'){
+            steps {
+                build job: 'Deploy-to-staging'
+            }
+        }
+
+        stage ('Deploy to Production'){
+            steps{
+                timeout(time:5, unit:'DAYS'){
+                    input message:'Approve PRODUCTION Deployment?'
+                }
+
+                build job: 'Deploy-to-Prod'
+            }
+            post {
+                success {
+                    echo 'Code deployed to Production.'
+                }
+
+                failure {
+                    echo ' Deployment failed.'
+                }
+            }
+        }
+
+
     }
 }
