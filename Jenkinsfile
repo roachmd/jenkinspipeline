@@ -18,9 +18,7 @@ stages{
         stage('Build'){
  
             steps {
-                {
-                    sh "mvn -B deploy"
-                }
+                 sh "mvn -B deploy"
             }
       }
 
